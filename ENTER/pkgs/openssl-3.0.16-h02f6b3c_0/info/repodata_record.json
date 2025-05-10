@@ -1,0 +1,22 @@
+{
+  "arch": "arm64",
+  "build": "h02f6b3c_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-arm64/",
+  "constrains": [],
+  "depends": [
+    "ca-certificates"
+  ],
+  "fn": "openssl-3.0.16-h02f6b3c_0.conda",
+  "license": "Apache-2.0",
+  "license_family": "Apache",
+  "md5": "3c6b0bbc9af0e6711ed6487e9dc7cfc0",
+  "name": "openssl",
+  "platform": "darwin",
+  "sha256": "0546f677f26e897791cce7dd2fbb71d19874b1dbe66b5e2131e8fc8a61854161",
+  "size": 4510912,
+  "subdir": "osx-arm64",
+  "timestamp": 1740990210000,
+  "url": "https://repo.anaconda.com/pkgs/main/osx-arm64/openssl-3.0.16-h02f6b3c_0.conda",
+  "version": "3.0.16"
+}

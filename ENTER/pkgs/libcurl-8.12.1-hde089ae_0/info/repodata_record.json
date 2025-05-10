@@ -1,0 +1,29 @@
+{
+  "arch": "arm64",
+  "build": "hde089ae_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-arm64/",
+  "constrains": [],
+  "depends": [
+    "krb5 >=1.20.1,<1.21.0a0",
+    "libnghttp2 >=1.57.0",
+    "libnghttp2 >=1.57.0,<2.0a0",
+    "libssh2 >=1.10.0",
+    "libssh2 >=1.11.1,<2.0a0",
+    "openssl >=3.0.15,<4.0a0",
+    "zlib >=1.2.13,<1.3.0a0",
+    "zstd >=1.5.2,<1.6.0a0"
+  ],
+  "fn": "libcurl-8.12.1-hde089ae_0.conda",
+  "license": "curl",
+  "license_family": "MIT",
+  "md5": "b39ca65969a32001f8f98af21a5101cc",
+  "name": "libcurl",
+  "platform": "darwin",
+  "sha256": "369f4021a03cd75a6196a7846f6c37f2bd0674ec906b70cc287d46a969b79bbf",
+  "size": 426064,
+  "subdir": "osx-arm64",
+  "timestamp": 1739986400000,
+  "url": "https://repo.anaconda.com/pkgs/main/osx-arm64/libcurl-8.12.1-hde089ae_0.conda",
+  "version": "8.12.1"
+}

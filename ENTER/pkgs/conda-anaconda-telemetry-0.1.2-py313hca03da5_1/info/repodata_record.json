@@ -1,0 +1,24 @@
+{
+  "arch": "arm64",
+  "build": "py313hca03da5_1",
+  "build_number": 1,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-arm64/",
+  "constrains": [],
+  "depends": [
+    "conda >=24.11",
+    "python >=3.13,<3.14.0a0",
+    "python_abi 3.13.* *_cp313"
+  ],
+  "fn": "conda-anaconda-telemetry-0.1.2-py313hca03da5_1.conda",
+  "license": "BSD-3-Clause",
+  "license_family": "BSD",
+  "md5": "d19232cde44714e7a83cb94ce1ba5db1",
+  "name": "conda-anaconda-telemetry",
+  "platform": "darwin",
+  "sha256": "a4ad36051eda7a94e7f03a3def81e07bafdc752ae04d1fc852d74b6984686f6a",
+  "size": 16134,
+  "subdir": "osx-arm64",
+  "timestamp": 1744662754000,
+  "url": "https://repo.anaconda.com/pkgs/main/osx-arm64/conda-anaconda-telemetry-0.1.2-py313hca03da5_1.conda",
+  "version": "0.1.2"
+}

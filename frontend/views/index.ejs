@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-robot"></i>
+        <h1>FıkraBot</h1>
+      </div>
+      <div class="api-status">
+        <span id="status-indicator"></span>
+        <span id="status-text">Bağlanıyor...</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="chat-container" id="chat-container">
+        <div class="welcome-message">
+          <h2>Hoş Geldiniz!</h2>
+          <p>FıkraBot'a bir şeyler yazın ve size komik fıkralar anlatsın.</p>
+        </div>
+        <div id="messages">
+          <!-- Mesajlar buraya eklenecek -->
+        </div>
+      </div>
+
+      <div class="input-container">
+        <form id="message-form">
+          <input 
+            type="text" 
+            id="user-input" 
+            placeholder="FıkraBot'a bir şeyler yazın..."
+            autocomplete="off"
+            required
+          >
+          <button type="submit" id="send-button">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <footer>
+      <p>© 2025 FıkraBot - Türkçe Fıkra Üreten Yapay Zeka</p>
+    </footer>
+  </div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

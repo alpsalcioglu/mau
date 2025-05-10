@@ -1,0 +1,181 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import math
+import torch
+import os
+import sys
+
+
+try:
+    import sentencepiece as spm
+    SPM_AVAILABLE = True
+except ImportError:
+    print("The sentencepiece module could not be loaded! Some features may not work.")
+    SPM_AVAILABLE = False
+
+# MODEL CONFIGURATION
+# Let's specify the model and tokenizer paths correctly
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_PATH = os.path.join(BASE_DIR, "model_v11.pth")
+TOKENIZER_PATH = os.path.join(BASE_DIR, "fikra_tokenizer.model")
+
+# PRINT THE PATHS - FOR DEBUGGING
+print(f"Model Path: {MODEL_PATH}")
+print(f"Tokenizer Path: {TOKENIZER_PATH}")
+print(f"Do files exist? Model: {os.path.exists(MODEL_PATH)}, Tokenizer: {os.path.exists(TOKENIZER_PATH)}")
+MAX_LEN = 144
+GEN_MAX_LENGTH = 150
+
+app = Flask(__name__)
+
+# CORS configuration - allow requests from all sources
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Tokenizer loading
+sp = None
+if SPM_AVAILABLE:
+    try:
+        sp = spm.SentencePieceProcessor()
+        sp.load(TOKENIZER_PATH)
+        print("Tokenizer loaded successfully")
+    except Exception as e:
+        print(f"Error loading tokenizer: {e}")
+        SPM_AVAILABLE = False
+
+# Load mini model
+class MiniGPT(torch.nn.Module):
+    def __init__(self, d_model=768, n_heads=12, n_layers=12, vocab_size=32000):
+        super().__init__()
+        self.d_model = d_model
+        self.wte = torch.nn.Embedding(vocab_size, d_model)
+        self.blocks = torch.nn.ModuleList([
+            torch.nn.Sequential(
+                torch.nn.LayerNorm(d_model),
+                torch.nn.MultiheadAttention(d_model, n_heads, batch_first=True),
+                torch.nn.LayerNorm(d_model),
+                torch.nn.Sequential(
+                    torch.nn.Linear(d_model, 4*d_model),
+                    torch.nn.GELU(),
+                    torch.nn.Linear(4*d_model, d_model)
+                )
+            )
+            for _ in range(n_layers)
+        ])
+        self.ln_f = torch.nn.LayerNorm(d_model)
+
+    def forward(self, x, past=None):
+        x = self.wte(x)
+        for block in self.blocks:
+            norm = block[0]
+            attn = block[1]
+            norm2 = block[2]
+            ffn = block[3]
+            
+            normed = norm(x)
+            attn_output, _ = attn(normed, normed, normed)
+            x = x + attn_output
+            
+            normed = norm2(x)
+            ffn_output = ffn(normed)
+            x = x + ffn_output
+            
+        x = self.ln_f(x)
+        return torch.matmul(x, self.wte.weight.T)
+
+# Model loading
+model = None
+try:
+    model = MiniGPT(d_model=384, n_heads=6, n_layers=6, vocab_size=32000 if sp else 10000)
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+    model.to(device)
+    model.eval()
+    print("Model loaded successfully")
+except Exception as e:
+    print(f"Error loading model: {e}")
+
+def generate_text(prompt):
+    """
+    Function that generates text based on the given prompt
+    """
+    if not SPM_AVAILABLE or sp is None:
+        return {"error": "Tokenizer could not be loaded"}
+    
+    if model is None:
+        return {"error": "Model could not be loaded"}
+    
+    try:
+        tokens = sp.encode(prompt, out_type=int)[-MAX_LEN:]
+        gen = tokens.copy()
+        mem = torch.zeros(1, 1, model.d_model, device=device)
+        
+        # Text generation
+        for _ in range(GEN_MAX_LENGTH-len(tokens)):
+            inp = torch.tensor([gen[-MAX_LEN:]], device=device)
+            logits = model(inp, mem)[:, -1]/0.7
+            next_tok = torch.multinomial(torch.softmax(logits, dim=-1), 1).item()
+            gen.append(next_tok)
+            txt = sp.decode(gen)
+            if next_tok == sp.eos_id() or (len(gen) >= 50 and txt.strip()[-1] in ".!?"):
+                break
+                
+        result = sp.decode(gen)
+        # Remove "??" and "⁇" characters
+        result = result.replace("??", "").replace("⁇", "")
+        
+        return {"text": result, "status": "success"}
+    except Exception as e:
+        print(f"Error in text generation: {e}")
+        return {"error": str(e)}
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    """API health check"""
+    return jsonify({
+        "status": "up",
+        "tokenizer": sp is not None,
+        "model": model is not None
+    })
+
+@app.route('/generate', methods=['POST', 'OPTIONS'])
+def api_generate():
+    """Text generation API endpoint"""
+    # Handle OPTIONS requests
+    if request.method == 'OPTIONS':
+        response = jsonify({})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
+        return response
+    
+    # Check incoming data
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "JSON data required"}), 400
+        
+        # Accept 'prompt' or 'message' key
+        prompt = None
+        if 'prompt' in data:
+            prompt = data['prompt']
+        elif 'message' in data:
+            prompt = data['message']
+        
+        if not prompt:
+            return jsonify({"error": "Prompt or message required"}), 400
+        
+        # Quick response for testing
+        if prompt.lower() == "test":
+            return jsonify({"text": "This is a test response!", "status": "success"})
+        
+        # Generate text
+        result = generate_text(prompt)
+        return jsonify(result)
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    # Use port 5001 instead of 5000 (MacOS might be using port 5000 for AirPlay)
+    app.run(debug=True, host='0.0.0.0', port=5001)

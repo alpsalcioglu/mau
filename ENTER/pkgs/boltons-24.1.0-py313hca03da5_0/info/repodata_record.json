@@ -1,0 +1,23 @@
+{
+  "arch": "arm64",
+  "build": "py313hca03da5_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-arm64/",
+  "constrains": [],
+  "depends": [
+    "python >=3.13,<3.14.0a0",
+    "python_abi 3.13.* *_cp313"
+  ],
+  "fn": "boltons-24.1.0-py313hca03da5_0.conda",
+  "license": "BSD-3-Clause",
+  "license_family": "BSD",
+  "md5": "c6da6156a9010f819963c5dafafd71c2",
+  "name": "boltons",
+  "platform": "darwin",
+  "sha256": "32d3f88498bb560e77740990135aed951cd3bb00210b42a00b9dc113ef117c8d",
+  "size": 508071,
+  "subdir": "osx-arm64",
+  "timestamp": 1737061823000,
+  "url": "https://repo.anaconda.com/pkgs/main/osx-arm64/boltons-24.1.0-py313hca03da5_0.conda",
+  "version": "24.1.0"
+}

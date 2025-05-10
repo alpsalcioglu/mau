@@ -1,0 +1,23 @@
+{
+  "arch": "arm64",
+  "build": "py313h313beb8_9",
+  "build_number": 9,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-arm64/",
+  "constrains": [],
+  "depends": [
+    "libcxx >=14.0.6",
+    "python >=3.13,<3.14.0a0",
+    "python_abi 3.13.* *_cp313"
+  ],
+  "fn": "brotli-python-1.0.9-py313h313beb8_9.conda",
+  "license": "MIT",
+  "md5": "154783fd1e7c351a3e3635575ed51c9f",
+  "name": "brotli-python",
+  "platform": "darwin",
+  "sha256": "106b199460e19953488b9ea2feb47675be7556dc91ceadc13e31e4db6a0504ba",
+  "size": 376042,
+  "subdir": "osx-arm64",
+  "timestamp": 1736182809000,
+  "url": "https://repo.anaconda.com/pkgs/main/osx-arm64/brotli-python-1.0.9-py313h313beb8_9.conda",
+  "version": "1.0.9"
+}

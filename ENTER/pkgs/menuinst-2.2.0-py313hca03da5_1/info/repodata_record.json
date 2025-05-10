@@ -1,0 +1,23 @@
+{
+  "arch": "arm64",
+  "build": "py313hca03da5_1",
+  "build_number": 1,
+  "channel": "https://repo.anaconda.com/pkgs/main/osx-arm64/",
+  "constrains": [],
+  "depends": [
+    "python >=3.13,<3.14.0a0",
+    "python_abi 3.13.* *_cp313"
+  ],
+  "fn": "menuinst-2.2.0-py313hca03da5_1.conda",
+  "license": "BSD-3-Clause AND MIT",
+  "license_family": "BSD",
+  "md5": "b23f0584f6ad886934104f22879203fe",
+  "name": "menuinst",
+  "platform": "darwin",
+  "sha256": "c692bb807de598ada78e16b1e57e717b22dec9bc94e90f6a63676b80f7095e49",
+  "size": 175591,
+  "subdir": "osx-arm64",
+  "timestamp": 1738943779000,
+  "url": "https://repo.anaconda.com/pkgs/main/osx-arm64/menuinst-2.2.0-py313hca03da5_1.conda",
+  "version": "2.2.0"
+}

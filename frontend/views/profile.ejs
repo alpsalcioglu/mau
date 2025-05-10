@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Software Project Management "Joke Bot"</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/profile.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="dashboard-header">
+            <div class="logo">
+                <span class="logo-emoji">🤖</span>
+                <h1>Software Project Management "Joke Bot"</h1>
+            </div>
+            
+            <div class="user-menu">
+                <div class="user-profile" id="profileDropdown">
+                    <img src="/images/<%= user.profilePicture %>" alt="Profil Resmi" class="profile-picture">
+                    <span class="username"><%= user.name %></span>
+                    <i class="dropdown-icon">▼</i>
+                </div>
+                
+                <div class="dropdown-menu" id="userDropdown">
+                    <a href="/dashboard" class="dropdown-item">Home</a>
+                    <a href="/logout" class="dropdown-item">Logout</a>
+                </div>
+            </div>
+        </header>
+        
+        <main class="profile-container">
+            <h2 class="profile-title">Your Profile Information</h2>
+            
+            <% if (success) { %>
+                <div class="alert alert-success">
+                    <%= success %>
+                </div>
+            <% } %>
+            
+            <% if (error) { %>
+                <div class="alert alert-error">
+                    <%= error %>
+                </div>
+            <% } %>
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-picture-container">
+                        <img src="/man-avatar-clipart-illustration-free-png.webp" alt="Profil Resmi" class="large-profile-picture">
+                    </div>
+                    
+                    <div class="profile-info">
+                        <h3><%= user.name %></h3>
+                        <p>@<%= user.username %></p>
+                        <p><%= user.email %></p>
+                    </div>
+                </div>
+                
+                <div class="profile-form-container">
+                    <form action="/profile/update" method="POST" class="profile-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" value="<%= user.name %>" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="<%= user.email %>" required>
+                        </div>
+                        
+                        <h4 class="section-title">Change Password (Optional)</h4>
+                        
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="currentPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword">
+                        </div>
+                        
+                        <div class="form-buttons">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        const profileDropdown = document.getElementById('profileDropdown');
+        const userDropdown = document.getElementById('userDropdown');
+        
+        profileDropdown.addEventListener('click', () => {
+            userDropdown.classList.toggle('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!profileDropdown.contains(e.target)) {
+                userDropdown.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
